@@ -1,13 +1,10 @@
 package com.example.demo.dao;
 
-import com.example.demo.model.Teacher;
-import com.example.demo.model.User;
+import com.example.demo.model.AppUser;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface UserRepo extends CrudRepository<User, Long> {
-    Optional<Object> findByUsername(String username);
+public interface UserRepo extends CrudRepository<AppUser, Long> {
+    AppUser findByUsername(String username);
 }

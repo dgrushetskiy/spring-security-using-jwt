@@ -1,8 +1,10 @@
 package com.example.demo.config;
 
 import com.example.demo.dao.UserRepo;
+import com.example.demo.service.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,27 +12,29 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private  JwtTokenFilter;
+    private JwtTokenFilter jwtTokenFilter;
+
+    @Autowired
+    private AppUserDetailsService appUserDetailsService;
 
     @Autowired
     UserRepo repoUsr;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username -> repoUsr
-                .findByUsername(username)
-                .orElseThrow(
-                        new UsernameNotFoundException("Not found"  ) ));
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(appUserDetailsService);
+
     }
 
     @Bean
@@ -65,12 +69,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Set permissions on endpoints
         http.authorizeRequests()
                 // Our public endpoints
-                .antMatchers("/api/public/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/author/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/author/search").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/book/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/book/search").permitAll()
+                .antMatchers(HttpMethod.POST, "/authenticate").permitAll()
+
                 // Our private endpoints
+                .antMatchers(HttpMethod.GET, "/students").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET, "/teachers").hasAnyAuthority("ADMIN", "USER")
                 .anyRequest().authenticated();
 
         // Add JWT token filter
@@ -80,7 +83,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         );
     }
 
-    @Override @Bean
+    @Override
+    @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }

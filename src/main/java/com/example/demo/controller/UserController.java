@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dao.UserRepo;
-import com.example.demo.model.User;
+import com.example.demo.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,18 +15,18 @@ public class UserController {
     private UserRepo repo;
 
     @GetMapping("/users")
-    private List<User> getAllUsers(){
-        return (List<User>) repo.findAll();
+    private List<AppUser> getAllUsers(){
+        return (List<AppUser>) repo.findAll();
     }
 
     @GetMapping("/user/{id}")
-    private Optional<User> getUsers(@PathVariable Long id){
+    private Optional<AppUser> getUsers(@PathVariable Long id){
         return  repo.findById(id);
     }
 
     @PostMapping("/users")
-    private User addUser(@RequestBody User newUser){
-        return repo.save(newUser);
+    private AppUser addUser(@RequestBody AppUser newAppUser){
+        return repo.save(newAppUser);
     }
 
     @DeleteMapping("/users/{id}")
@@ -35,17 +35,17 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    private User updateUser(@RequestBody User newUser, @PathVariable Long id){
+    private AppUser updateUser(@RequestBody AppUser newAppUser, @PathVariable Long id){
         return repo.findById(id)
                 .map(user -> {
-                    user.setName(newUser.getName());
-                    user.setRole(newUser.getRole());
+                    user.setName(newAppUser.getName());
+                    user.setRole(newAppUser.getRole());
                     return repo.save(user);
                 })
                 .orElseGet(() -> {
-                    newUser.setUser_id(Math.toIntExact(id));
+                    newAppUser.setUser_id(Math.toIntExact(id));
 
-                    return repo.save(newUser);
+                    return repo.save(newAppUser);
                 });
     }
 }
