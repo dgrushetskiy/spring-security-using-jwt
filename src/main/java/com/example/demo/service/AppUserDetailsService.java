@@ -31,43 +31,5 @@ public class AppUserDetailsService implements UserDetailsService {
         UserDetails usr = User.withUsername(user.getUsername()).password(user.getPassword()).authorities(user.getRole()).build();
         return usr;
 
-//        return new UserDetails(){
-//            @Override
-//            public Collection<? extends GrantedAuthority> getAuthorities() {
-//                List<SimpleGrantedAuthority> auths = new java.util.ArrayList<SimpleGrantedAuthority>();
-//                auths.add(new SimpleGrantedAuthority(user.getRole()));
-//                return auths;
-//            }
-//
-//            @Override
-//            public String getPassword() {
-//                return user.getPassword();
-//            }
-//
-//            @Override
-//            public String getUsername() {
-//                return user.getUsername();
-//            }
-//
-//            @Override
-//            public boolean isAccountNonExpired() {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean isAccountNonLocked() {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean isCredentialsNonExpired() {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean isEnabled() {
-//                return false;
-//            }
-//        };
     }
 }

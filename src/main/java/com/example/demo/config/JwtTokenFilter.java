@@ -30,12 +30,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserRepo userRepo;
 
-//    public JwtTokenFilter(JwtTokenUtil jwtTokenUtil,
-//                          UserRepo userRepo) {
-//        this.jwtTokenUtil = jwtTokenUtil;
-//        this.userRepo = userRepo;
-//    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -51,13 +45,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             System.out.println("Header contains bearer token");
             jwt = header.substring(7);
             username = jwtTokenUtil.extractUsername(jwt);
-//            chain.doFilter(request, response);
-//            return;
         }
-
-        // Get jwt token and validate
-        //final String token = header.split(" ")[1].trim();
-        //String username = jwtTokenUtil.extractUsername(token);
 
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -74,28 +62,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
         }
         chain.doFilter(request, response);
-
-//        UserDetails userDetails = appUserDetailsService.loadUserByUsername(username);
-//
-//        if (!jwtTokenUtil.validateToken(jwt, userDetails)) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//
-//
-//        UsernamePasswordAuthenticationToken
-//                authentication = new UsernamePasswordAuthenticationToken(
-//                userDetails, null,
-//                userDetails == null ?
-//                        List.of() : userDetails.getAuthorities()
-//        );
-//
-//        authentication.setDetails(
-//                new WebAuthenticationDetailsSource().buildDetails(request)
-//        );
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        chain.doFilter(request, response);
     }
 
 }

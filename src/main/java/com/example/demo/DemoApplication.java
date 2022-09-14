@@ -38,7 +38,7 @@ public class DemoApplication implements ApplicationRunner {
 
 		repoTch.save(new Teacher("Edward", "English"));
 		repoTch.save(new Teacher("Mary", "Math"));
-		repoTch.save(new Teacher("Sania", "Science"));
+		repoTch.save(new Teacher("Sana", "Science"));
 
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 

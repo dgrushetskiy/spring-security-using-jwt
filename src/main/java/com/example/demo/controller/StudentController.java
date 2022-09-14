@@ -87,7 +87,6 @@ public class StudentController {
                 .loadUserByUsername(authenticationRequest.getUsername());
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
-        //final String jwt = "1234";
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 }
